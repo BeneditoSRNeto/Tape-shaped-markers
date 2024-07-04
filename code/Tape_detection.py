@@ -18,7 +18,6 @@ from time import process_time
 
 def loadJson():
           json_path='metadados.json' 
-            
                   
           f = open (json_path, "r")
           data = json.loads(f.read())
@@ -972,7 +971,7 @@ def Detectect_TM(img):
 
                
                 if  hierarchy[0][i][2] == -1 and hierarchy[0][i][3] == -1 and cv2.arcLength(contours[i],True)>= 20:
-                    if  aspect==5.5 or aspect==6.33 or aspect==6.75 or aspect==6.5 or aspect==6.75 or aspect==7.0 or aspect==7.25 or aspect==7.5 or aspect==6.0 or aspect==7.33 or aspect==8.5 or aspect==7.666666666666667 or aspect==9.0 or aspect==10.0 or aspect==11.0 or aspect==12.0 or aspect==13.0 or aspect==14.0  or aspect==15.0  or aspect==9.5  or aspect==8.75  :
+                    if (aspect>=0.14 and aspect < 0.18) or aspect==5.5 or aspect==6.666666666666667 or aspect==6.333333333333333 or aspect==6.75 or aspect==6.5 or aspect==6.75 or aspect==7.0 or aspect==7.25 or aspect==7.5 or aspect==6.0 or aspect==7.33 or aspect==8.5 or aspect==7.666666666666667 or aspect==9.0 or aspect==10.0 or aspect==11.0 or aspect==12.0 or aspect==13.0 or aspect==14.0  or aspect==15.0  or aspect==9.5  or aspect==8.75  :
                    
                             cnt=contours[i]
                             rect = cv2.minAreaRect(cnt)
@@ -1051,20 +1050,20 @@ def Extract_TM(img):
 def Decode_TM(V):
     codigo=""
     pontos=[]
+    print("qtd :",len(V))
     for i in range(0,len(V)-2 ):
             if len(V)==12:
                 p3,p4,p1,p2=V[i]
                 
                 p7,p8,p5,p6=V[len(V)-4]
 
-                final_bottom_right=(p1[0]+5,p1[1])#azul
+                final_bottom_right=(p1[0]+5,p1[1])#azulq
                 final_top_right=(p4[0]+5,p4[1])#verme
                 final_bottom_left=(p6[0]-5,p6[1])#rosa
                 final_top_left =(p7[0]-5,p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-                
-                
+            
                 codigo=Extract_TM(warped_img)
                 
                 if codigo!= "":
@@ -1073,8 +1072,46 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
+                else:
+                    p3,p4,p1,p2=V[len(V)-2]
                 
-              
+                    p5,p6,p7,p8=V[i]
+
+                    final_bottom_left=(p1[0]+5,p1[1])#azulq
+                    final_top_left=(p4[0]+5,p4[1])#verme
+                    final_bottom_right=(p5[0]-5,p5[1])#rosa
+                    final_top_right =(p7[0]-5,p7[1])#verde
+
+                    warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                  
+                    codigo=Extract_TM(warped_img)
+                    if codigo!= "":
+                    
+                        pontos.append(final_top_right)
+                        pontos.append(final_bottom_left)
+                        pontos.append(codigo)
+                        break
+                    else:
+                        p3,p4,p1,p2=V[i+2]
+                
+                        p5,p6,p7,p8=V[len(V)-2]
+
+                        final_bottom_left=(p1[0]+5,p1[1])#azulq
+                        final_top_left=(p4[0]+5,p4[1])#verme
+                        final_bottom_right=(p5[0]-5,p5[1])#rosa
+                        final_top_right =(p7[0]-5,p7[1])#verde
+
+                        warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                      
+                        codigo=Extract_TM(warped_img)
+                        if codigo!= "":
+                        
+                            pontos.append(final_top_right)
+                            pontos.append(final_bottom_left)
+                            pontos.append(codigo)
+                            break
+                    
+            
             elif len(V)==7:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1086,7 +1123,7 @@ def Decode_TM(V):
                 final_top_left =(p7[0]-5,p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-                
+              
                 codigo =Extract_TM(warped_img)
                 if codigo!= "":
                     
@@ -1105,7 +1142,7 @@ def Decode_TM(V):
                     final_top_left =(p7[0],p7[1])#verde
 
                     warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-                   
+                  
                     codigo=Extract_TM(warped_img) 
                     if codigo!= "":
                     
@@ -1127,7 +1164,7 @@ def Decode_TM(V):
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
                 
                 codigo=Extract_TM(warped_img)
-                
+              
                 
                 if codigo!= "":
                     
@@ -1135,7 +1172,7 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
-              
+            
             elif len(V)==15:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1147,7 +1184,7 @@ def Decode_TM(V):
                 final_top_left =(p7[0],p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-               
+                
                 codigo=Extract_TM(warped_img)
 
                 
@@ -1157,7 +1194,26 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
-              
+                else:
+                    p3,p4,p1,p2=V[i]
+                
+                    p5,p6,p7,p8=V[len(V)-5]
+
+                    final_bottom_left=(p1[0],p1[1])#azulq
+                    final_top_left=(p4[0],p4[1])#verme
+                    final_bottom_right=(p5[0],p5[1])#rosa
+                    final_top_right =(p7[0],p7[1])#verde
+
+                    warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                                           
+                    codigo=Extract_TM(warped_img)
+                    if codigo!= "":
+                        
+                            pontos.append(final_top_right)
+                            pontos.append(final_bottom_left)
+                            pontos.append(codigo)
+                            break
+               
             elif len(V)==6:
                 p3,p4,p1,p2=V[len(V)-4]
                 
@@ -1178,7 +1234,7 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
-                if codigo == "":
+                else:
                     p3,p4,p1,p2,=V[i]
                 
                     p7,p8,p5,p6=V[len(V)-4]
@@ -1197,8 +1253,27 @@ def Decode_TM(V):
                         pontos.append(final_bottom_left)
                         pontos.append(codigo)
                         break 
+                    else:
+                        p3,p4,p1,p2=V[i]
+                    
+                        p5,p6,p7,p8=V[len(V)-2]
 
-              
+                        final_bottom_left=(p1[0],p1[1])#azulq
+                        final_top_left=(p4[0],p4[1])#verme
+                        final_bottom_right=(p5[0],p5[1])#rosa
+                        final_top_right =(p7[0],p7[1])#verde
+
+                        warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                      
+                            
+                        codigo=Extract_TM(warped_img)
+                        if codigo!= "":
+                            
+                                pontos.append(final_top_right)
+                                pontos.append(final_bottom_left)
+                                pontos.append(codigo)
+                                break
+               
             elif len(V)==9:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1210,7 +1285,7 @@ def Decode_TM(V):
                 final_top_left =(p7[0],p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-                
+              
                 codigo=Extract_TM(warped_img)
                 if codigo!= "":
                     
@@ -1218,7 +1293,25 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
-               
+                else:
+                        p1,p2,p3,p4=V[i+2]
+                    
+                        p5,p6,p7,p8=V[len(V)-2]
+
+                        final_bottom_right=(p1[0],p1[1])#azulq
+                        final_top_right=(p2[0],p2[1])#verme
+                        final_bottom_left=(p5[0],p5[1])#rosa
+                        final_top_left =(p7[0],p7[1])#verde
+
+                        warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                      
+                        codigo=Extract_TM(warped_img)
+                        if codigo!= "":
+                            
+                                pontos.append(final_top_right)
+                                pontos.append(final_bottom_left)
+                                pontos.append(codigo)
+                                break    
             elif len(V)==11:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1238,7 +1331,7 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break    
-                if codigo == "":
+                else: 
                     p3,p4,p1,p2=V[len(V)-8]
                 
                     p7,p8,p5,p6=V[i+1]
@@ -1257,6 +1350,26 @@ def Decode_TM(V):
                         pontos.append(final_bottom_left)
                         pontos.append(codigo)
                         break 
+                    else:
+                        p3,p4,p1,p2=V[i+2]
+                
+                        p5,p6,p7,p8=V[len(V)-2]
+
+                        final_bottom_left=(p1[0]+5,p1[1])#azulq
+                        final_top_left=(p4[0]+5,p4[1])#verme
+                        final_bottom_right=(p5[0]-5,p5[1])#rosa
+                        final_top_right =(p7[0]-5,p7[1])#verde
+
+                        warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                      
+                        
+                        codigo=Extract_TM(warped_img)
+                        if codigo!= "":
+                        
+                            pontos.append(final_top_right)
+                            pontos.append(final_bottom_left)
+                            pontos.append(codigo)
+                            break
             elif len(V)==10:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1268,7 +1381,7 @@ def Decode_TM(V):
                 final_top_left =(p7[0],p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-              
+                
                 codigo=Extract_TM(warped_img)  
                 if codigo!= "":
                     
@@ -1276,6 +1389,27 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
+                else:
+                    p3,p4,p1,p2=V[i+2]
+                
+                    p5,p6,p7,p8=V[len(V)-2]
+
+                    final_bottom_left=(p1[0]+5,p1[1])#azulq
+                    final_top_left=(p4[0]+5,p4[1])#verme
+                    final_bottom_right=(p5[0]-5,p5[1])#rosa
+                    final_top_right =(p7[0]-5,p7[1])#verde
+
+                    warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                    
+                    
+                    codigo=Extract_TM(warped_img)
+                    if codigo!= "":
+                    
+                        pontos.append(final_top_right)
+                        pontos.append(final_bottom_left)
+                        pontos.append(codigo)
+                        break
+
             elif len(V)==16:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1287,14 +1421,34 @@ def Decode_TM(V):
                 final_top_left =(p7[0],p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-                
+               
                 codigo=Extract_TM(warped_img) 
                 if codigo!= "":
                     
                     pontos.append(final_top_right)
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
-                    break 
+                    break
+                else:
+                    p3,p4,p1,p2=V[i]
+                
+                    p5,p6,p7,p8=V[len(V)-6]
+
+                    final_bottom_left=(p1[0],p1[1])#azulq
+                    final_top_left=(p4[0],p4[1])#verme
+                    final_bottom_right=(p5[0],p5[1])#rosa
+                    final_top_right =(p7[0],p7[1])#verde
+
+                    warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                   
+                        
+                    codigo=Extract_TM(warped_img)
+                    if codigo!= "":
+                        
+                            pontos.append(final_top_right)
+                            pontos.append(final_bottom_left)
+                            pontos.append(codigo)
+                            break 
             elif len(V)==14:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1314,6 +1468,26 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
+                else:
+                    p3,p4,p1,p2=V[i]
+                
+                    p5,p6,p7,p8=V[len(V)-5]
+
+                    final_bottom_left=(p1[0],p1[1])#azulq
+                    final_top_left=(p4[0],p4[1])#verme
+                    final_bottom_right=(p5[0],p5[1])#rosa
+                    final_top_right =(p7[0],p7[1])#verde
+
+                    warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                  
+                        
+                    codigo=Extract_TM(warped_img)
+                    if codigo!= "":
+                        
+                            pontos.append(final_top_right)
+                            pontos.append(final_bottom_left)
+                            pontos.append(codigo)
+                            break
             elif len(V)==13:
                 p3,p4,p1,p2=V[i+1]
                 
@@ -1325,7 +1499,7 @@ def Decode_TM(V):
                 final_top_left =(p7[0],p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-               
+              
                 codigo=Extract_TM(warped_img) 
                 if codigo!= "":
                     
@@ -1333,7 +1507,7 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
-                
+               
             elif len(V)==5:
                 p3,p4,p1,p2=V[i]
                 
@@ -1345,7 +1519,7 @@ def Decode_TM(V):
                 final_top_left =(p7[0]-5,p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-               
+              
                 codigo=Extract_TM(warped_img)
                 if codigo!= "":
                     
@@ -1365,7 +1539,7 @@ def Decode_TM(V):
                 final_top_left =(p7[0]-5,p7[1])#verde
 
                 warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
-               
+                
                 codigo=Extract_TM(warped_img)
                 if codigo!= "":
                     
@@ -1373,10 +1547,52 @@ def Decode_TM(V):
                     pontos.append(final_bottom_left)
                     pontos.append(codigo)
                     break
+            elif len(V)==25:
+                    p3,p4,p1,p2=V[i]
+                
+                    p5,p6,p7,p8=V[len(V)-5]
+
+                    final_bottom_left=(p1[0],p1[1])#azulq
+                    final_top_left=(p4[0],p4[1])#verme
+                    final_bottom_right=(p5[0],p5[1])#rosa
+                    final_top_right =(p7[0],p7[1])#verde
+
+                    warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                   
+                        
+                    codigo=Extract_TM(warped_img)
+                    if codigo!= "":
+                        
+                            pontos.append(final_top_right)
+                            pontos.append(final_bottom_left)
+                            pontos.append(codigo)
+                            break
+            elif len(V)==35 or len(V)==21 or len(V)==33:
+                   
+                            p1,p2,p3,p4=V[i+2]
+                        
+                            p5,p6,p7,p8=V[len(V)-2]
+
+                            final_top_left=(p2[0],p2[1])#azulq
+                            final_bottom_left=(p3[0],p3[1])#verme
+                            final_top_right=(p7[0],p7[1])#rosa
+                            final_bottom_right =(p8[0],p8[1])#verde
+
+                            warped_img=WarpTM(final_top_left,final_top_right,final_bottom_left,final_bottom_right,frame)
+                         
+                                
+                            codigo=Extract_TM(warped_img)
+                            if codigo!= "":
+                                
+                                    pontos.append(final_top_right)
+                                    pontos.append(final_bottom_left)
+                                    pontos.append(codigo)
+                                    break
+           
     return pontos
 
-
 url="C:\\tape-shaped-marker\\videos\\conditionA\\tape.mp4"
+
  
 camera = cv2.VideoCapture(url)
 while True:
