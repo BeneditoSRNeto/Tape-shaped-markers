@@ -1,2 +1,2 @@
 # Tape-shaped-markers
-Indoor localization system based on fiducial Tape-shaped markers
+Tape-Shaped, Multiscale, and Continuous-Readable Fiducial Marker for Indoor Navigation and Localization Systems
